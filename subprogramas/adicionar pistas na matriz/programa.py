@@ -5,11 +5,15 @@ arquivo.close()
 
 # grava as pistas na matriz
 matriz = [[""] * 9 for i in range(9)]
-"""
-for i in range(0, 9):
-    for j in range(0, 9):
-        matriz[i][j]
-"""
+letras = {"A" : 0, "B" : 1, "C" : 2, "D" : 3, "E" : 4, "F" : 5, "G" : 6, "H" : 7, "I" : 8}
+for i in range(0, len(pistas)):
+    if pistas[i] == ",":
+        if pistas[i - 1] in letras:
+            coluna = letras[pistas[i - 1]]
+            # verificação de linha e coluna aqui
+            linha = int(pistas[i + 1]) - 1
+            valor = int(pistas[i + 3])
+            matriz[linha][coluna] = valor
 
 # exibe a matriz na tela no formato correto
 linha_letras = "    A   B   C    D   E   F    G   H   I"
@@ -31,3 +35,10 @@ for i in range(0, 9):
             print("|", end="")
     print("|{}".format(i+1))
 print(linha_letras)
+
+# validação das pistas
+validacao = True
+if len(pistas) < 5 or len(pistas) > 479: # 6 caracteres por linha, incluindo o '\n'
+    validacao = False
+if not validacao:
+    print("Grade invalida!")

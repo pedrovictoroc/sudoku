@@ -1,3 +1,6 @@
+import time
+tempo_inicio = time.clock()
+
 linha_letras = "    A   B   C    D   E   F    G   H   I"
 separador = " ++---+---+---++---+---+---++---+---+---++"
 separador2 = " ++===+===+===++===+===+===++===+===+===++"
@@ -23,3 +26,5 @@ for i in range(0, 9):
             print("|", end="")
     print("|{}".format(i+1))
 print(linha_letras)
+
+print("Tempo necessario para gerar a matriz: {}s".format(time.clock() - tempo_inicio))
