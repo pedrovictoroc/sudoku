@@ -2,7 +2,7 @@ while True:
     letras = {"A" : 0, "B" : 1, "C" : 2, "D" : 3, "E" : 4, "F" : 5, "G" : 6, "H" : 7, "I" : 8}
     validacao = True
 
-    # inserir jogada no formato correto 'A, 1, 1'
+    # inserir jogada no formato correto 'A, 1: 1'
     jogada = input()
 
     if jogada[0].isalpha() and jogada[0] in letras:
