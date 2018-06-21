@@ -26,8 +26,8 @@ def exibir_matriz(matriz):
             if j == 2 or j == 5:
                 print("|", end="")
         print("|{}".format(i+1))
-    print(linha_letras)
     print(separador)
+    print(linha_letras)
 
 def ler_arquivo_texto(nome_arquivo):
     # abre o arquivo em modo leitura
@@ -49,7 +49,7 @@ def gravar_pistas(pistas, matriz):
 def verificar_quantidade_pistas(pistas):
     validacao = True
     # verifica se a quantidade de pistas está no intervalo [1, 80]
-    if len(pistas) < 5 or len(pistas) > 479: # 6 caracteres por linha, incluindo o '\n'
+    if len(pistas) < 5 or len(pistas) > 480: # 6 caracteres por linha, incluindo o '\n'
         validacao = False
         print("Quantidade de pistas invalida")
     return validacao
@@ -101,6 +101,24 @@ def verificar_jogada(jogada):
             print("Numero invalido")
             validacao = False
 
+    elif len(jogada) == 4: # verifica se o usuário quer deletar uma jogada
+        if jogada[0] == "D":
+            if jogada[1] in letras:
+                if jogada[2] == ",":
+                    if jogada[3].isdigit():
+                        if int(jogada[3]) > 0 and int(jogada[3]) < 10:
+                            validacao = True
+                        else:
+                            validacao = False
+                    else:
+                        validacao = False
+                else:
+                    validacao = False
+            else:
+                validacao = False
+        else:
+            validacao = False
+
     else:
         print("Formato incorreto de jogada")
         validacao = False
@@ -125,16 +143,6 @@ def verificar_matriz(matriz):
                     if matriz[k][i] == matriz[j][i]:
                         validacao = False
                         print("{} esta repetido na coluna {}".format(matriz[k][i], letras[k]))
-
-    """
-    # verifica se há números repetidos em cada coluna # remover
-    for i in range(0, 9):
-        for j in range(0, 9):
-            for k in range(j+1, 9):
-                if matriz[k][i] == matriz[j][i]:
-                    validacao = False
-                    print("{} esta repetido na linha {} e coluna {}".format(matriz[k][i], k, i))
-    """
 
     # verifica se há números repetidos em cada região
     auxiliar = 0
@@ -196,23 +204,31 @@ if selecao == 1:
                 jogada = input()
                 jogada = tratar_jogada(jogada) # deixa a jogada no formato correto
                 if verificar_jogada(jogada): # verifica se a jogada é válida
-                    if matriz[int(jogada[2]) - 1][letras[jogada[0]]] == "": # verifica se o usuário está tentando sobrescrever uma pista
-                        inserir_jogada(jogada, matriz)
-                        if verificar_matriz(matriz):
-                            exibir_matriz(matriz)
-                            if verificar_matriz_completa:
-                                print("Parabens! Voce terminou o Sudoku!")
+                    if len(jogada) == 5:
+                        if matriz_pistas[int(jogada[2]) - 1][letras[jogada[0]]] == "": # verifica se o usuário está tentando sobrescrever uma pista
+                            inserir_jogada(jogada, matriz)
+                            if verificar_matriz(matriz):
+                                exibir_matriz(matriz)
+                            else:
+                                print("Jogada invalida, entre uma nova jogada:")
+                                apagar_jogada(int(jogada[2]) - 1, letras[jogada[0]], matriz)
                         else:
-                            print("Jogada invalida, entre uma nova jogada:")
-                            apagar_jogada(int(jogada[2]) - 1, letras[jogada[0]], matriz)
+                            print("Jogada inválida. Impossível sobrescrever uma pista. (!)")
+                    elif len(jogada) == 4:
+                        if len(jogada) == 4: # verifica se o usuário quer apagar uma jogada
+                            if matriz[int(jogada[3]) - 1][letras[jogada[1]]] != "":
+                                matriz[int(jogada[3]) - 1][letras[jogada[1]]] = ""
+                                print("Jogada deletada!")
+                                exibir_matriz(matriz)
                     else:
-                        print("Jogada inválida. Impossível sobrescrever uma pista. (!)")
-                else:
-                    print("Jogada invalida, entre uma nova jogada:")
+                        print("Jogada invalida, entre uma nova jogada:")
         else:
             print("Entradas inválidas")
     else:
         print("Entradas invalidas")
+
+    if not verificar_matriz_completa:
+        print("Parabens! Voce terminou o Sudoku!")
 
 # modo batch
 elif selecao == 2:
